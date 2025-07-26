@@ -5,6 +5,13 @@ import os
 import datetime
 
 # Date fields
+
+def format_date_en(date):
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    months = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"]
+    weekday = weekdays[date.weekday()]
+    return f"{weekday} {date.day} {months[date.month - 1]} {date.year}"
 date_request = st.date_input("Date of request", value=datetime.date.today())
 date_visit = st.date_input("Date of visit")
 
@@ -75,8 +82,8 @@ row = {
     "Reference": reference,
     "Institution": institution,
     "Title": title,
-    "Date of request": date_request,
-    "Date of visit": date_visit,
+    "Date of request": format_date_en(date_request),
+    "Date of visit": format_date_en(date_visit),
     "Last name": last_name,
     "First name": first_name,
     "Address": address,
