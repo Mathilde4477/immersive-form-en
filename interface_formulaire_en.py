@@ -4,7 +4,7 @@ from fpdf import FPDF
 import pandas as pd
 import os
 
-st.title("Formulaire Immersive - Version Anglaise")
+st.title("Formulaire Immersive - Version Complète")
 
 # Champs d'identité
 reference = st.text_input("Référence")
