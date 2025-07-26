@@ -37,15 +37,6 @@ programme = st.selectbox("Tour program", [
     "⚔️ Medieval",
     "📝 Other"
 ])
-    "Plages du Débarquement (secteur US)", 
-    "Plages du Débarquement (secteur GB)",
-    "Plages du Débarquement (secteur Canadien)",
-    "Plages du Débarquement (US/GB)", 
-    "Mont Saint Michel",
-    "Old Bayeux and Cathedral",
-    "Medieval",
-    "Other"
-])
 detail_programme = st.text_area("Champ libre programme")
 
 # Champs horaires
