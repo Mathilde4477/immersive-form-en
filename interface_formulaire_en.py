@@ -10,23 +10,23 @@ st.title("Formulaire Immersive - Version Complète")
 reference = st.text_input("Référence")
 institution = st.text_input("Institution")
 title = st.selectbox("Title", ["👨 Mr", "👩 Mrs", "❓ Other"])
-nom = st.text_input("Last name")
-prenom = st.text_input("First name")
-adresse = st.text_input("Address")
-adresse2 = st.text_input("Address 2")
+last_name = st.text_input("Last name")
+prelast_name = st.text_input("First name")
+address = st.text_input("Address")
+address2 = st.text_input("Address 2")
 code_postal = st.text_input("Code postal")
-commune = st.text_input("City")
-pays = st.text_input("Country")
-telephone = st.text_input("Phone")
+city = st.text_input("City")
+country = st.text_input("Country")
+phone = st.text_input("Phone")
 email = st.text_input("Email")
 
-nom_clients = st.text_area("Last name des clients")
+last_name_clients = st.text_area("Last name des clients")
 
 # Champs visite
-langue = st.selectbox("Tour language", ["French", "Anglais"])
+tour_language = st.selectbox("Tour language", ["French", "Anglais"])
 niveau_scolaire = st.text_input("Niveau scolaire")
-nombre_personnes = st.number_input("Last namebre de personnes", min_value=1, step=1)
-capacite_max = st.number_input("Capacité max", min_value=1, step=1)
+last_namebre_personnes = st.number_input("Last namebre de personnes", min_value=1, step=1)
+capacity_max = st.number_input("Capacité max", min_value=1, step=1)
 programme = st.selectbox("Tour program", [
     "🇺🇸 D-Day beaches (US sector)",
     "🇬🇧 D-Day beaches (British sector)",
@@ -40,25 +40,25 @@ programme = st.selectbox("Tour program", [
 detail_programme = st.text_area("Champ libre programme")
 
 # Champs horaires
-heure_debut = st.selectbox("Heure de début", [f"{h:02d}:{m:02d}" for h in range(6, 21) for m in range(0, 60, 5)])
-lieu_debut = st.text_input("Lieu de début")
-heure_fin = st.selectbox("Heure de fin", [f"{h:02d}:{m:02d}" for h in range(6, 22) for m in range(0, 60, 5)])
-lieu_fin = st.text_input("Lieu de fin")
+start_time = st.selectbox("Heure de début", [f"{h:02d}:{m:02d}" for h in range(6, 21) for m in range(0, 60, 5)])
+start_location = st.text_input("Lieu de début")
+end_time = st.selectbox("Heure de fin", [f"{h:02d}:{m:02d}" for h in range(6, 22) for m in range(0, 60, 5)])
+end_location = st.text_input("Lieu de fin")
 
 # Champs tarifs
 type_visite = st.radio("Guide only ou chauffeur-guide", ["Guide only", "Driver-guide"])
-tarif_guidage = st.number_input("Guiding fee HT (€)", min_value=0.0, step=1.0, format="%.2f")
-tva_guidage = round(tarif_guidage * 0.20, 2)
-tarif_chauffeur = st.number_input("Driver fee HT (€)", min_value=0.0, step=1.0, format="%.2f")
-tva_chauffeur = round(tarif_chauffeur * 0.10, 2)
-tarif_ttc = round(tarif_guidage + tva_guidage + tarif_chauffeur + tva_chauffeur, 2)
+guide_fee = st.number_input("Guiding fee HT (€)", min_value=0.0, step=1.0, format="%.2f")
+vat_guide_rate = round(guide_fee * 0.20, 2)
+driver_fee = st.number_input("Driver fee HT (€)", min_value=0.0, step=1.0, format="%.2f")
+vat_driver_rate = round(driver_fee * 0.10, 2)
+total_price = round(guide_fee + vat_guide_rate + driver_fee + vat_driver_rate, 2)
 
 # Duration estimée
 from datetime import datetime
 try:
     fmt = "%H:%M"
-    debut = datetime.strptime(heure_debut, fmt)
-    fin = datetime.strptime(heure_fin, fmt)
+    debut = datetime.strptime(start_time, fmt)
+    fin = datetime.strptime(end_time, fmt)
     duree = str(fin - debut)
 except:
     duree = ""
@@ -71,36 +71,36 @@ texte_vip = st.text_area("Informations supplémentaires en cas de VIP") if vip e
 ligne = {
     "Référence": reference,
     "Institution": institution,
-    "Title": titre,
-    "Last name": nom,
-    "First name": prenom,
-    "Address": adresse,
-    "Address 2": adresse2,
+    "Title": title,
+    "Last name": last_name,
+    "First name": prelast_name,
+    "Address": address,
+    "Address 2": address2,
     "Code postal": code_postal,
-    "City": commune,
-    "Country": pays,
-    "Phone": telephone,
+    "City": city,
+    "Country": country,
+    "Phone": phone,
     "Email": email,
-    "Tour language": langue,
+    "Tour language": tour_language,
     "Niveau scolaire": niveau_scolaire,
-    "Last namebre de personnes": nombre_personnes,
-    "Capacité max": capacite_max,
+    "Last namebre de personnes": last_namebre_personnes,
+    "Capacité max": capacity_max,
     "Tour program": programme,
     "Détail programme": detail_programme,
-    "Heure de début": heure_debut,
-    "Lieu de début": lieu_debut,
-    "Heure de fin": heure_fin,
-    "Lieu de fin": lieu_fin,
+    "Heure de début": start_time,
+    "Lieu de début": start_location,
+    "Heure de fin": end_time,
+    "Lieu de fin": end_location,
     "Duration": duree,
     "Type de visite": type_visite,
     "VIP": "Oui" if vip else "Non",
     "Texte VIP": texte_vip,
-    "Guiding fee HT": f"{tarif_guidage:.2f}",
-    "TVA guidage (20%)": f"{tva_guidage:.2f}",
-    "Driver fee HT": f"{tarif_chauffeur:.2f}",
-    "TVA chauffeur (10%)": f"{tva_chauffeur:.2f}",
-    "Total price (incl. VAT)": f"{tarif_ttc:.2f}",
-    "Last name clients": nom_clients
+    "Guiding fee HT": f"{guide_fee:.2f}",
+    "TVA guidage (20%)": f"{vat_guide_rate:.2f}",
+    "Driver fee HT": f"{driver_fee:.2f}",
+    "TVA chauffeur (10%)": f"{vat_driver_rate:.2f}",
+    "Total price (incl. VAT)": f"{total_price:.2f}",
+    "Last name clients": last_name_clients
 }
 
 # Export Excel
@@ -119,7 +119,7 @@ if st.button("Générer le PDF"):
     pdf.multi_cell(0, 10, txt="Formulaire Immersive - Données complètes")
     for key, value in ligne.items():
         pdf.multi_cell(0, 10, txt=f"{key} : {value}")
-    nom_fichier = f"formulaire_{reference or nom}_{institution or prenom}.pdf".replace(" ", "_")
-    pdf.output(nom_fichier)
-    with open(nom_fichier, "rb") as f:
-        st.download_button("Télécharger le PDF", f, nom_fichier, mime="application/pdf")
+    last_name_fichier = f"formulaire_{reference or last_name}_{institution or prelast_name}.pdf".replace(" ", "_")
+    pdf.output(last_name_fichier)
+    with open(last_name_fichier, "rb") as f:
+        st.download_button("Télécharger le PDF", f, last_name_fichier, mime="application/pdf")
