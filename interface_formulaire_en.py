@@ -111,6 +111,7 @@ row = {
 # Export Excel
 if st.button("Export to Excel"):
     df = pd.DataFrame([row])
+    df = df[['Date of request', 'Reference', 'Date of visit', 'Title', 'Last name', 'First name', 'Address', 'Address 2', 'Postal code', 'City', 'Country', 'Phone', 'Email', 'Client names', 'School level', 'Number of participants', 'Max capacity', 'Programme', 'Programme details', 'Start time', 'Start location', 'End time', 'End location', 'Duration', 'Guide fee excl. VAT', 'Guide VAT (20%)', 'Driver fee excl. VAT', 'Driver VAT (10%)', 'Total incl. VAT', 'VIP', 'VIP notes']]
     excel_file = "immersive_form_en.xlsx"
     df.to_excel(excel_file, index=False)
     with open(excel_file, "rb") as f:
