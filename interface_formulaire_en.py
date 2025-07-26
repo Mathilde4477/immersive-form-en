@@ -14,7 +14,7 @@ st.title("Formulaire Immersive - Version Anglaise")
 # Champs d'identité
 reference = st.text_input("Référence")
 institution = st.text_input("Institution")
-title = st.selectbox("Title", ["👨 Mr", "👩 Mrs", "❓ Other"])
+title = st.selectbox("Title", ["Mr", "Mrs", "Other"])
 last_name = st.text_input("Last name")
 prelast_name = st.text_input("First name")
 address = st.text_input("Address")
@@ -33,14 +33,14 @@ niveau_scolaire = st.text_input("Niveau scolaire")
 last_namebre_personnes = st.number_input("Last namebre de personnes", min_value=1, step=1)
 capacity_max = st.number_input("Capacité max", min_value=1, step=1)
 programme = st.selectbox("Tour program", [
-    "🇺🇸 D-Day beaches (US sector)",
-    "🇬🇧 D-Day beaches (British sector)",
-    "🇨🇦 D-Day beaches (Canadian sector)",
-    "🇺🇸🇬🇧 D-Day beaches (US/GB)",
-    "🏰 Mont Saint Michel",
-    "⛪ Old Bayeux and Cathedral",
-    "⚔️ Medieval",
-    "📝 Other"
+    "D-Day beaches (US sector)",
+    "D-Day beaches (British sector)",
+    "D-Day beaches (Canadian sector)",
+    "D-Day beaches (US/GB)",
+    "Mont Saint Michel",
+    "Old Bayeux and Cathedral",
+    "Medieval",
+    "Other"
 ])
 detail_programme = st.text_area("Champ libre programme")
 
