@@ -9,7 +9,7 @@ st.title("Formulaire Immersive - Version Complète")
 # Champs d'identité
 reference = st.text_input("Référence")
 institution = st.text_input("Institution")
-titre = st.selectbox("Title", ["M.", "Mme", "Mlle"])
+title = st.selectbox("Title", ["👨 Mr", "👩 Mrs", "❓ Other"])
 nom = st.text_input("Last name")
 prenom = st.text_input("First name")
 adresse = st.text_input("Address")
@@ -28,6 +28,15 @@ niveau_scolaire = st.text_input("Niveau scolaire")
 nombre_personnes = st.number_input("Last namebre de personnes", min_value=1, step=1)
 capacite_max = st.number_input("Capacité max", min_value=1, step=1)
 programme = st.selectbox("Tour program", [
+    "🇺🇸 D-Day beaches (US sector)",
+    "🇬🇧 D-Day beaches (British sector)",
+    "🇨🇦 D-Day beaches (Canadian sector)",
+    "🇺🇸🇬🇧 D-Day beaches (US/GB)",
+    "🏰 Mont Saint Michel",
+    "⛪ Old Bayeux and Cathedral",
+    "⚔️ Medieval",
+    "📝 Other"
+])
     "Plages du Débarquement (secteur US)", 
     "Plages du Débarquement (secteur GB)",
     "Plages du Débarquement (secteur Canadien)",
