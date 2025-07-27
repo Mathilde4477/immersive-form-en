@@ -125,14 +125,57 @@ if st.button("Export to Excel"):
         st.download_button("Download Excel file", f, excel_file)
 
 # Export PDF
+from fpdf import FPDF
+
+class CustomPDF(FPDF):
+    def section_title_en(self, title):
+        self.set_fill_color(240, 240, 240)
+        self.set_text_color(0)
+        self.set_draw_color(200, 200, 200)
+        self.set_line_width(0.3)
+        self.set_font("Times", 'B', 14)
+        self.cell(0, 10, title, ln=True, fill=True)
+        self.ln(2)
+        
 if st.button("Generate PDF"):
-    pdf = FPDF()
+    pdf = CustomPDF()
+    pdf.set_margins(15, 20)
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 10, txt="Immersive Form – English version")
-    for key, value in row.items():
-        pdf.multi_cell(0, 10, txt=f"{key}: {value}")
-    filename = f"form_{reference or last_name}_{institution or first_name}.pdf".replace(" ", "_")
-    pdf.output(filename)
-    with open(filename, "rb") as f:
-        st.download_button("Download PDF", f, filename, mime="application/pdf")
+
+    # Logo centré
+    if os.path.exists("logo.png"):
+        pdf.image("logo.png", x=90, y=8, w=30)
+        pdf.ln(30)
+
+    # Titre
+    pdf.set_font("Times", 'B', 16)
+    pdf.cell(0, 10, "Immersive Form - Collected Data", ln=True, align="C")
+    pdf.ln(10)
+
+    pdf.set_font("Times", size=12)
+
+    # Bloc : Personal Information
+    pdf.section_title_en("🧾 Personal Information")
+    for field in ["Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"]:
+        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+
+    # Bloc : Visit Information
+    pdf.section_title_en("📍 Visit Information")
+    for field in ["Language", "School level", "Number of people", "Max capacity", "Program", "Program details", "Start time", "Start location", "End time", "End location", "Duration", "Visit type"]:
+        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+
+    # Bloc : Pricing
+    pdf.section_title_en("💰 Pricing")
+    for field in ["Guiding fee excl. VAT", "VAT Guiding (20%)", "Driver fee excl. VAT", "VAT Driver (10%)", "Total incl. VAT"]:
+        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+
+    # Bloc : VIP
+    pdf.section_title_en("⭐ VIP")
+    for field in ["VIP", "VIP details"]:
+        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+
+    # Export
+    nom_fichier = f"form_{reference or Last name}_{institution or First name}.pdf".replace(" ", "_")
+    pdf.output(nom_fichier)
+    with open(nom_fichier, "rb") as f:
+        st.download_button("Download PDF", f, nom_fichier, mime="application/pdf")
