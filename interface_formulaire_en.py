@@ -175,7 +175,7 @@ if st.button("Generate PDF"):
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
     # Export
-    nom_fichier = f"form_{reference or last name}_{institution or first name}.pdf".replace(" ", "_")
+    nom_fichier = f"form_{reference or last_name}_{institution or first_name}.pdf".replace(" ", "_")
     pdf.output(nom_fichier)
     with open(nom_fichier, "rb") as f:
         st.download_button("Download PDF", f, nom_fichier, mime="application/pdf")
