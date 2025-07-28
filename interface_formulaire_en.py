@@ -218,9 +218,9 @@ if st.button("Generate PDF"):
     for field in ["VIP", "VIP info"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
-    # Enregistrement
-    filename = f"form_{reference or last_name}_{institution or first_name}.pdf".replace(" ", "_")
-    pdf.output(filename)
-    with open(filename, "rb") as f:
-        st.download_button("Download PDF", f, filename, mime="application/pdf")
+    # Export
+    nom_fichier = f"form_{ligne.get('Reference') or ligne.get('Last name')}_{ligne.get('Institution') or ligne.get('First name')}.pdf".replace(" ", "_")
+    pdf.output(nom_fichier)
+    with open(nom_fichier, "rb") as f:
+        st.download_button("Download PDF", f, nom_fichier, mime="application/pdf")
 
