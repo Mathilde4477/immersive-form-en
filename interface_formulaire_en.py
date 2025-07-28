@@ -160,28 +160,32 @@ if st.button("Export to Excel"):
     with open(excel_file, "rb") as f:
         st.download_button("Download Excel file", f, excel_file)
 
-# Fonction améliorée pour affichage d’un champ : clé + valeur sur deux colonnes
-    def add_field(pdf, label, value):
-        try:
-            # Encodage sécurisé en latin-1
-            value_str = str(value).encode('latin-1', 'replace').decode('latin-1')
-        except:
-            value_str = "[Invalid character]"
+# Fonction utilitaire pour les titres de section
+def section_title(pdf, title):
+    pdf.set_fill_color(200, 220, 255)
+    pdf.set_font("Times", 'B', 14)
+    pdf.cell(0, 10, title, ln=True, fill=True)
+    pdf.ln(2)
 
-        # Gestion des champs trop longs sans espaces
-        if len(value_str) > 100 and " " not in value_str:
-            value_str = " ".join([value_str[i:i+40] for i in range(0, len(value_str), 40)])
+# Fonction utilitaire pour ajouter un champ proprement
+def add_field(pdf, label, value):
+    try:
+        value_str = str(value).encode('latin-1', 'replace').decode('latin-1')
+    except:
+        value_str = "[Invalid character]"
 
-            pdf.set_font("Times", style='B', size=12)
-            pdf.multi_cell(180, 7, f"{label} :", border=0)
+    # Découpe automatique si chaîne trop longue sans espace
+    if len(value_str) > 100 and " " not in value_str:
+        value_str = " ".join([value_str[i:i+40] for i in range(0, len(value_str), 40)])
 
-            pdf.set_font("Times", style='', size=12)
-            pdf.multi_cell(180, 7, value_str, border=0)
-            pdf.ln(2)
+    pdf.set_font("Times", style='B', size=12)
+    pdf.multi_cell(180, 7, f"{label} :", border=0)
 
+    pdf.set_font("Times", style='', size=12)
+    pdf.multi_cell(180, 7, value_str, border=0)
+    pdf.ln(2)
 
-
-# Export PDF
+# ===== GÉNÉRATION PDF =====
 if st.button("Generate PDF"):
     pdf = FPDF()
     pdf.set_margins(15, 20)
@@ -189,70 +193,43 @@ if st.button("Generate PDF"):
 
     # Logo centré
     pdf.image("logo.png", x=(210 - 30) / 2, y=8, w=30)
-    pdf.ln(25)
+    pdf.ln(30)
 
-    # Titre principal
     pdf.set_font("Times", 'B', 16)
-    pdf.cell(0, 10, "Immersive Form - Details", ln=True, align="C")
+    pdf.cell(0, 10, "Immersive Form - English Version", ln=True, align="C")
     pdf.ln(10)
 
-    # Fonction titre de section
-    def section_title_en(self, title):
-        self.set_fill_color(230, 230, 230)
-        self.set_font("Times", 'B', 14)
-        self.cell(0, 10, title, ln=True, fill=True)
-        self.ln(2)
-
-    FPDF.section_title_en = section_title_en
-
     # Bloc : Personal Information
-    pdf.section_title_en("Personal Information")
-    bloc_info = [
-        "Reference", "Institution", "Title", "Date of request", "Date of visit", 
-        "Last name", "First name", "Address", "Address 2", "Postal Code", "City", 
-        "Country", "Phone", "Email", "Client names"
-    ]
-    for field in bloc_info:
+    section_title(pdf, "Personal Information")
+    for field in ["Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"]:
         add_field(pdf, field, ligne.get(field, ''))
 
     # Bloc : Visit
-    pdf.section_title_en("Visit")
-    bloc_visite = [
-        "Language", "School level", "Number of people", "Max capacity", "Program", 
-        "Program details"
-    ]
-    for field in bloc_visite:
+    section_title(pdf, "Visit")
+    for field in ["Language", "School level", "Number of people", "Max capacity", "Program", "Program details"]:
         add_field(pdf, field, ligne.get(field, ''))
 
-    # Bloc : Schedule
-    pdf.section_title_en("Schedule")
-    bloc_horaire = [
-        "Start time", "Start location", "End time", "End location", "Duration"
-    ]
-    for field in bloc_horaire:
+    # Bloc : Timing
+    section_title(pdf, "Timing")
+    for field in ["Start time", "Start location", "End time", "End location", "Duration"]:
         add_field(pdf, field, ligne.get(field, ''))
 
-    # Bloc : Pricing
-    pdf.section_title_en("Pricing")
-    bloc_tarifs = [
-        "Visit type", "Guide fee excl. tax", "VAT Guide (20%)", 
-        "Driver fee excl. tax", "VAT Driver (10%)", "Total incl. tax"
-    ]
-    for field in bloc_tarifs:
+    # Bloc : Price
+    section_title(pdf, "Rates")
+    for field in ["Visit type", "Guiding fee (excl. VAT)", "VAT on guiding (20%)", "Driver fee (excl. VAT)", "VAT on driver (10%)", "Total incl. VAT"]:
         add_field(pdf, field, ligne.get(field, ''))
 
     # Bloc : VIP
-    if ligne.get("VIP", "") == "Yes":
-        pdf.section_title_en("VIP Visit")
-        bloc_vip = ["VIP", "VIP info"]
-        for field in bloc_vip:
-            add_field(pdf, field, ligne.get(field, ''))
+    section_title(pdf, "VIP Option")
+    for field in ["VIP", "VIP notes"]:
+        add_field(pdf, field, ligne.get(field, ''))
 
-    # Génération fichier
-    nom_fichier = f"form_{ligne.get('Reference', '')}_{ligne.get('Institution', ligne.get('Last name', ''))}.pdf".replace(" ", "_")
+    # Génération et téléchargement
+    nom_fichier = f"form_{ligne.get('Reference') or ligne.get('Last name')}_{ligne.get('Institution') or ligne.get('First name')}.pdf".replace(" ", "_")
     pdf.output(nom_fichier)
     with open(nom_fichier, "rb") as f:
         st.download_button("Download PDF", f, nom_fichier, mime="application/pdf")
+
 
 
 
