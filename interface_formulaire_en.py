@@ -114,6 +114,42 @@ row = {
     "Driver VAT (10%)": f"{driver_vat:.2f}",
     "Total incl. VAT": f"{total_price:.2f}"
 }
+ligne = {
+    "Reference": reference,
+    "Institution": institution,
+    "Title": title,
+    "Date of request": date_request.strftime("%A %d %B %Y"),
+    "Date of visit": date_visit.strftime("%A %d %B %Y"),
+    "Last name": last_name,
+    "First name": first_name,
+    "Address": address,
+    "Address 2": address2,
+    "Postal Code": postal_code,
+    "City": city,
+    "Country": country,
+    "Phone": phone,
+    "Email": email,
+    "Client names": client_names,
+    "Language": language,
+    "School level": school_level,
+    "Number of people": nb_people,
+    "Maximum capacity": max_capacity,
+    "Program": program,
+    "Program details": program_details,
+    "Start time": start_time,
+    "Start location": start_location,
+    "End time": end_time,
+    "End location": end_location,
+    "Duration": duration,
+    "Visit type": visit_type,
+    "VIP": "Yes" if vip else "No",
+    "VIP info": vip_info,
+    "Guide fee (excl. tax)": f"{guide_fee:.2f}",
+    "Guide VAT (20%)": f"{guide_vat:.2f}",
+    "Driver fee (excl. tax)": f"{driver_fee:.2f}",
+    "Driver VAT (10%)": f"{driver_vat:.2f}",
+    "Total incl. VAT": f"{total_price:.2f}"
+}
 
 # Export Excel
 if st.button("Export to Excel"):
@@ -129,14 +165,11 @@ from fpdf import FPDF
 
 class CustomPDF(FPDF):
     def section_title_en(self, title):
-        self.set_fill_color(240, 240, 240)
-        self.set_text_color(0)
-        self.set_draw_color(200, 200, 200)
-        self.set_line_width(0.3)
-        self.set_font("Times", 'B', 14)
+        self.set_fill_color(230, 230, 230)
+        self.set_font("Times", 'B', 13)
         self.cell(0, 10, title, ln=True, fill=True)
         self.ln(2)
-        
+
 if st.button("Generate PDF"):
     pdf = CustomPDF()
     pdf.set_margins(15, 20)
@@ -144,38 +177,43 @@ if st.button("Generate PDF"):
 
     # Logo centré
     if os.path.exists("logo.png"):
-        pdf.image("logo.png", x=90, y=8, w=30)
-        pdf.ln(30)
+        pdf.image("logo.png", x=80, w=50)
+        pdf.ln(15)
 
-    # Titre
     pdf.set_font("Times", 'B', 16)
-    pdf.cell(0, 10, "Immersive Form - Collected Data", ln=True, align="C")
+    pdf.cell(0, 10, "Immersive Form - Full Data", ln=True, align="C")
     pdf.ln(10)
 
     pdf.set_font("Times", size=12)
 
-    # Bloc : Personal Information
+    # Personal Information
     pdf.section_title_en("Personal Information")
     for field in ["Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
-    # Bloc : Visit Information
-    pdf.section_title_en("Visit Information")
-    for field in ["Language", "School level", "Number of people", "Max capacity", "Program", "Program details", "Start time", "Start location", "End time", "End location", "Duration", "Visit type"]:
+    # Visit
+    pdf.section_title_en("Visit")
+    for field in ["Language", "School level", "Number of people", "Maximum capacity", "Program", "Program details"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
-    # Bloc : Pricing
-    pdf.section_title_en("Pricing")
-    for field in ["Guiding fee excl. VAT", "VAT Guiding (20%)", "Driver fee excl. VAT", "VAT Driver (10%)", "Total incl. VAT"]:
+    # Schedule
+    pdf.section_title_en("Schedule")
+    for field in ["Start time", "Start location", "End time", "End location", "Duration"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
-    # Bloc : VIP
+    # Fees
+    pdf.section_title_en("Fees")
+    for field in ["Visit type", "Guide fee (excl. tax)", "Guide VAT (20%)", "Driver fee (excl. tax)", "Driver VAT (10%)", "Total incl. VAT"]:
+        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+
+    # VIP
     pdf.section_title_en("VIP")
-    for field in ["VIP", "VIP details"]:
+    for field in ["VIP", "VIP info"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
-    # Export
-    nom_fichier = f"form_{reference or last_name}_{institution or first_name}.pdf".replace(" ", "_")
-    pdf.output(nom_fichier)
-    with open(nom_fichier, "rb") as f:
-        st.download_button("Download PDF", f, nom_fichier, mime="application/pdf")
+    # Enregistrement
+    filename = f"form_{reference or last_name}_{institution or first_name}.pdf".replace(" ", "_")
+    pdf.output(filename)
+    with open(filename, "rb") as f:
+        st.download_button("Download PDF", f, filename, mime="application/pdf")
+
