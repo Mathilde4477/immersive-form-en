@@ -171,7 +171,6 @@ class CustomPDF(FPDF):
         self.set_font("Times", '', 12)
 
 FPDF.section_title = section_title
-    pdf.section_title("Visit")
 
 
 if st.button("Generate PDF"):
@@ -205,6 +204,7 @@ if st.button("Generate PDF"):
     pdf.section_title_en("Visit")
     for field in ["Language", "School level", "Number of people", "Maximum capacity", "Program", "Program details"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+        pdf.section_title("Visit")
 
     # Schedule
     pdf.section_title_en("Schedule")
