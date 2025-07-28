@@ -170,8 +170,6 @@ class CustomPDF(FPDF):
         self.cell(0, 10, title, ln=True, fill=True)
         self.set_font("Times", '', 12)
 
-FPDF.section_title = section_title
-
 # Fonction pour les titres de sections avec fond gris
 def section_title(self, title):
     self.set_fill_color(230, 230, 230)
