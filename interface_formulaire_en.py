@@ -135,7 +135,7 @@ ligne = {
     "Number of people": num_people,
     "Maximum capacity": max_capacity,
     "Programme": programme,
-    "Programme details": programme_details,
+    "Programme details": programme_detail,
     "Start time": start_time,
     "Start location": start_location,
     "End time": end_time,
