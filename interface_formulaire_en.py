@@ -209,7 +209,6 @@ if st.button("Generate PDF"):
         pdf.multi_cell(w=180, h=8, txt=f"{field} : {ligne.get(field, '')}", border=0)
 
     # Visit
-    pdf.section_title_en("Visit")
     for field in ["Language", "School level", "Number of people", "Maximum capacity", "Program", "Program details"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
         pdf.section_title("Visit")
