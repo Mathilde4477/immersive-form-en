@@ -164,12 +164,15 @@ if st.button("Export to Excel"):
 from fpdf import FPDF
 
 class CustomPDF(FPDF):
-    def section_title_en(self, title):
+    def section_title(self, title):
         self.set_fill_color(230, 230, 230)
-        self.set_font("Times", 'B', 13)
+        self.set_font("Times", 'B', 12)
         self.cell(0, 10, title, ln=True, fill=True)
-        pdf.multi_cell(w=180, h=8, txt=f"{field} : {ligne.get(field, '')}", border=0)
-        self.ln(2)
+        self.set_font("Times", '', 12)
+
+FPDF.section_title = section_title
+    pdf.section_title("Visit")
+
 
 if st.button("Generate PDF"):
     pdf = FPDF()
