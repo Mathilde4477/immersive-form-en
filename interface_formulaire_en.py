@@ -161,18 +161,24 @@ if st.button("Export to Excel"):
         st.download_button("Download Excel file", f, excel_file)
 
 # Fonction améliorée pour affichage d’un champ : clé + valeur sur deux colonnes
-def add_field(pdf, label, value):
-    try:
-        value_str = str(value)
-        value_str = value_str.encode('latin-1', 'replace').decode('latin-1')
-    except:
-        value_str = "[Invalid character]"
+    def add_field(pdf, label, value):
+        try:
+            # Encodage sécurisé en latin-1
+            value_str = str(value).encode('latin-1', 'replace').decode('latin-1')
+        except:
+            value_str = "[Invalid character]"
 
-    pdf.set_font("Times", style='B', size=12)
-    pdf.multi_cell(0, 7, f"{label} :", border=0)
-    pdf.set_font("Times", style='', size=12)
-    pdf.multi_cell(0, 7, value_str, border=0)
-    pdf.ln(2)
+        # Gestion des champs trop longs sans espaces
+        if len(value_str) > 100 and " " not in value_str:
+            value_str = " ".join([value_str[i:i+40] for i in range(0, len(value_str), 40)])
+
+            pdf.set_font("Times", style='B', size=12)
+            pdf.multi_cell(180, 7, f"{label} :", border=0)
+
+            pdf.set_font("Times", style='', size=12)
+            pdf.multi_cell(180, 7, value_str, border=0)
+            pdf.ln(2)
+
 
 
 # Export PDF
