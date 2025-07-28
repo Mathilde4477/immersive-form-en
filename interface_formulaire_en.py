@@ -169,10 +169,10 @@ def add_field(pdf, label, value):
         value_str = "[Invalid character]"
 
     pdf.set_font("Times", style='B', size=12)
-    pdf.cell(60, 8, f"{label} :", border=0)
+    pdf.multi_cell(0, 7, f"{label} :", border=0)
     pdf.set_font("Times", style='', size=12)
-    # On limite à 120 mm pour éviter les débordements
-    pdf.multi_cell(120, 8, value_str, border=0)
+    pdf.multi_cell(0, 7, value_str, border=0)
+    pdf.ln(2)
 
 
 # Export PDF
