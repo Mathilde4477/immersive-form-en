@@ -161,84 +161,83 @@ if st.button("Export to Excel"):
         st.download_button("Download Excel file", f, excel_file)
 
 # Export PDF
-from fpdf import FPDF
-
-class CustomPDF(FPDF):
-    def section_title(self, title):
-        self.set_fill_color(230, 230, 230)
-        self.set_font("Times", 'B', 12)
-        self.cell(0, 10, title, ln=True, fill=True)
-        self.set_font("Times", '', 12)
-
-# Fonction pour les titres de sections avec fond gris
-def section_title(self, title):
-    self.set_fill_color(230, 230, 230)
-    self.set_font("Times", 'B', 12)
-    self.cell(0, 10, title, ln=True, fill=True)
-    self.set_font("Times", '', 12)
-
-# Ajout dynamique à la classe FPDF
-FPDF.section_title = section_title
-
-
 if st.button("Generate PDF"):
     pdf = FPDF()
     pdf.set_margins(15, 20)
     pdf.add_page()
-    
+
     # Logo centré
-    pdf.image("logo.png", x=90, y=8, w=30)
+    pdf.image("logo.png", x=(210 - 30) / 2, y=8, w=30)
     pdf.ln(25)
 
+    # Titre principal
     pdf.set_font("Times", 'B', 16)
     pdf.cell(0, 10, "Immersive Form - Details", ln=True, align="C")
     pdf.ln(10)
 
-    pdf.set_font("Times", style='', size=12)
+    # Fonction de titre de section
+    def section_title_en(self, title):
+        self.set_fill_color(230, 230, 230)
+        self.set_font("Times", 'B', 14)
+        self.cell(0, 10, title, ln=True, fill=True)
+        self.ln(2)
 
-    # Bloc : Personal Information
-    pdf.set_fill_color(230, 230, 230)
-    pdf.set_font("Times", 'B', 12)
-    pdf.cell(0, 10, "Personal Information", ln=True, fill=True)
+    FPDF.section_title_en = section_title_en
+
     pdf.set_font("Times", size=12)
 
-    for field in [
-        "Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", 
-        "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"
-    ]:
+    # Bloc : Personal Information
+    pdf.section_title_en("Personal Information")
+    bloc_info = [
+        "Reference", "Institution", "Title", "Date of request", "Date of visit", 
+        "Last name", "First name", "Address", "Address 2", "Postal Code", "City", 
+        "Country", "Phone", "Email", "Client names"
+    ]
+    for field in bloc_info:
         valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
         pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
-
-
-    # Visit
-    for field in ["Language", "School level", "Number of people", "Maximum capacity", "Programme", "Programme detail"]:
-        for field in bloc_info:
+    # Bloc : Visit
+    pdf.section_title_en("Visit")
+    bloc_visite = [
+        "Language", "School level", "Number of people", "Max capacity", "Program", 
+        "Program details"
+    ]
+    for field in bloc_visite:
         valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
         pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
-        pdf.section_title("Visit")
 
-    # Schedule
+    # Bloc : Schedule
     pdf.section_title_en("Schedule")
-    for field in ["Start time", "Start location", "End time", "End location", "Duration"]:
+    bloc_horaire = [
+        "Start time", "Start location", "End time", "End location", "Duration"
+    ]
+    for field in bloc_horaire:
         valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
         pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
-    # Fees
-    pdf.section_title_en("Fees")
-    for field in ["Visit type", "Guide fee (excl. tax)", "Guide VAT (20%)", "Driver fee (excl. tax)", "Driver VAT (10%)", "Total incl. VAT"]:
+    # Bloc : Pricing
+    pdf.section_title_en("Pricing")
+    bloc_tarifs = [
+        "Visit type", "Guide fee excl. tax", "VAT Guide (20%)", 
+        "Driver fee excl. tax", "VAT Driver (10%)", "Total incl. tax"
+    ]
+    for field in bloc_tarifs:
         valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
         pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
-    # VIP
-    pdf.section_title_en("VIP")
-    for field in ["VIP", "VIP info"]:
-        valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
-        pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
+    # Bloc : VIP
+    if ligne.get("VIP", "") == "Yes":
+        pdf.section_title_en("VIP Visit")
+        bloc_vip = ["VIP", "VIP info"]
+        for field in bloc_vip:
+            valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
+            pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
-    # Export
-    nom_fichier = f"form_{ligne.get('Reference') or ligne.get('Last name')}_{ligne.get('Institution') or ligne.get('First name')}.pdf".replace(" ", "_")
+    # Nom de fichier
+    nom_fichier = f"form_{ligne.get('Reference', '')}_{ligne.get('Institution', ligne.get('Last name', ''))}.pdf".replace(" ", "_")
     pdf.output(nom_fichier)
     with open(nom_fichier, "rb") as f:
         st.download_button("Download PDF", f, nom_fichier, mime="application/pdf")
+
 
