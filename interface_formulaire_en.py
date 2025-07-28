@@ -213,23 +213,28 @@ if st.button("Generate PDF"):
 
     # Visit
     for field in ["Language", "School level", "Number of people", "Maximum capacity", "Programme", "Programme detail"]:
-        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+        for field in bloc_info:
+        valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
         pdf.section_title("Visit")
 
     # Schedule
     pdf.section_title_en("Schedule")
     for field in ["Start time", "Start location", "End time", "End location", "Duration"]:
-        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+        valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
     # Fees
     pdf.section_title_en("Fees")
     for field in ["Visit type", "Guide fee (excl. tax)", "Guide VAT (20%)", "Driver fee (excl. tax)", "Driver VAT (10%)", "Total incl. VAT"]:
-        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+        valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
     # VIP
     pdf.section_title_en("VIP")
     for field in ["VIP", "VIP info"]:
-        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+        valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
 
     # Export
     nom_fichier = f"form_{ligne.get('Reference') or ligne.get('Last name')}_{ligne.get('Institution') or ligne.get('First name')}.pdf".replace(" ", "_")
