@@ -132,7 +132,7 @@ ligne = {
     "Client names": client_names,
     "Language": language,
     "School level": school_level,
-    "Number of people": nb_people,
+    "Number of people": num_people,
     "Maximum capacity": max_capacity,
     "Program": program,
     "Program details": program_details,
