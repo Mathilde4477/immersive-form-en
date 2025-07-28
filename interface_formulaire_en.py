@@ -155,22 +155,22 @@ if st.button("Generate PDF"):
     pdf.set_font("Times", size=12)
 
     # Bloc : Personal Information
-    pdf.section_title_en("🧾 Personal Information")
+    pdf.section_title_en("Personal Information")
     for field in ["Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
     # Bloc : Visit Information
-    pdf.section_title_en("📍 Visit Information")
+    pdf.section_title_en("Visit Information")
     for field in ["Language", "School level", "Number of people", "Max capacity", "Program", "Program details", "Start time", "Start location", "End time", "End location", "Duration", "Visit type"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
     # Bloc : Pricing
-    pdf.section_title_en("💰 Pricing")
+    pdf.section_title_en("Pricing")
     for field in ["Guiding fee excl. VAT", "VAT Guiding (20%)", "Driver fee excl. VAT", "VAT Driver (10%)", "Total incl. VAT"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
     # Bloc : VIP
-    pdf.section_title_en("⭐ VIP")
+    pdf.section_title_en("VIP")
     for field in ["VIP", "VIP details"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
 
