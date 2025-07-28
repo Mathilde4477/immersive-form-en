@@ -172,25 +172,31 @@ class CustomPDF(FPDF):
         self.ln(2)
 
 if st.button("Generate PDF"):
-    pdf = CustomPDF()
+    pdf = FPDF()
     pdf.set_margins(15, 20)
     pdf.add_page()
-
+    
     # Logo centré
-    if os.path.exists("logo.png"):
-        pdf.image("logo.png", x=80, w=50)
-        pdf.ln(15)
+    pdf.image("logo.png", x=90, y=8, w=30)
+    pdf.ln(25)
 
     pdf.set_font("Times", 'B', 16)
-    pdf.cell(0, 10, "Immersive Form - Full Data", ln=True, align="C")
+    pdf.cell(0, 10, "Immersive Form - Details", ln=True, align="C")
     pdf.ln(10)
 
+    pdf.set_font("Times", style='', size=12)
+
+    # Bloc : Personal Information
+    pdf.set_fill_color(230, 230, 230)
+    pdf.set_font("Times", 'B', 12)
+    pdf.cell(0, 10, "Personal Information", ln=True, fill=True)
     pdf.set_font("Times", size=12)
 
-    # Personal Information
-    pdf.section_title_en("Personal Information")
-    for field in ["Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"]:
-        pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
+    for field in [
+        "Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", 
+        "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"
+    ]:
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {ligne.get(field, '')}", border=0)
 
     # Visit
     pdf.section_title_en("Visit")
