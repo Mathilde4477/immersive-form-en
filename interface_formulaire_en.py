@@ -207,7 +207,8 @@ if st.button("Generate PDF"):
         "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"
     ]:
         valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
-        pdf.multi_cell(0, 8, f"{field} : {valeur}")
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {valeur}", border=0)
+
 
 
     # Visit
