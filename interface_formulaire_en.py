@@ -168,6 +168,7 @@ class CustomPDF(FPDF):
         self.set_fill_color(230, 230, 230)
         self.set_font("Times", 'B', 13)
         self.cell(0, 10, title, ln=True, fill=True)
+        pdf.multi_cell(w=180, h=8, txt=f"{field} : {ligne.get(field, '')}", border=0)
         self.ln(2)
 
 if st.button("Generate PDF"):
