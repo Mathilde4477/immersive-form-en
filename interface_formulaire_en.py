@@ -206,10 +206,12 @@ if st.button("Generate PDF"):
         "Reference", "Institution", "Title", "Date of request", "Date of visit", "Last name", "First name", 
         "Address", "Address 2", "Postal Code", "City", "Country", "Phone", "Email", "Client names"
     ]:
-        pdf.multi_cell(w=180, h=8, txt=f"{field} : {ligne.get(field, '')}", border=0)
+        valeur = str(ligne.get(field, '')).encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(0, 8, f"{field} : {valeur}")
+
 
     # Visit
-    for field in ["Language", "School level", "Number of people", "Maximum capacity", "Program", "Program details"]:
+    for field in ["Language", "School level", "Number of people", "Maximum capacity", "Programme", "Programme detail"]:
         pdf.multi_cell(0, 8, f"{field} : {ligne.get(field, '')}")
         pdf.section_title("Visit")
 
